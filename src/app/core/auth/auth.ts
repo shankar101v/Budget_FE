@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../../models/auth';
 import { Observable, tap } from 'rxjs';
 import { User } from '../../models/user';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
-  private readonly apiUrl = 'https://budget-be-demo.vercel.app/api/auth';
-
+  private readonly apiUrl = `${environment.apiUrl}/api/auth`;
   private readonly tokenKey = 'budget_app_token';
   private readonly userKey = 'budget_app_user';
 

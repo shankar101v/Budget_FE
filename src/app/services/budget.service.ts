@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Budget } from '../models/budget';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BudgetService {
-   private readonly apiUrl =
-    'https://budget-be-demo.vercel.app/api/budgets';
+   private readonly apiUrl = `${environment.apiUrl}/api/budgets`;
 
   constructor(private http: HttpClient) {}
 
