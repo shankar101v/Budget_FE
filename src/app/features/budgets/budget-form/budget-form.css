@@ -1,7 +1,9 @@
 .budget-form-page {
+  width: 100%;
   max-width: 600px;
   margin: 40px auto;
   padding: 30px;
+  box-sizing: border-box;
 }
 
 .page-header {
@@ -13,6 +15,7 @@
 }
 
 .page-header p {
+  margin: 0;
   color: #666;
 }
 
@@ -48,17 +51,6 @@
   color: #d32f2f;
 }
 
-.form-actions {
-  margin-top: 30px;
-}
-
-.form-actions button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
 .error-message {
   padding: 12px;
   margin-bottom: 20px;
@@ -78,9 +70,71 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 16px;
 }
 
 .form-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+
+  .budget-form-page {
+    margin: 30px auto;
+    padding: 24px;
+  }
+
+  .page-header {
+    margin-bottom: 25px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+
+  .budget-form-page {
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .page-header {
+    margin-bottom: 22px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .page-header p {
+    font-size: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 11px;
+    font-size: 16px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 22px;
+  }
+
+  .form-actions button {
+    width: 100%;
+    padding: 12px;
+  }
 }
