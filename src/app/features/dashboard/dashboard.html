@@ -1,0 +1,126 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Overview of your budgets and spending.</p>
+    </div>
+
+    <a routerLink="/budgets/new" class="add-budget-button"> + Add Budget </a>
+  </div>
+
+  @if (isLoading) {
+    <div class="loading">Loading dashboard...</div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage) {
+    <!-- SUMMARY CARDS -->
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <span class="summary-label"> Total Budgets </span>
+
+        <strong class="summary-value">
+          {{ totalBudgets }}
+        </strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-label"> Total Budget </span>
+
+        <strong class="summary-value"> ₹{{ totalBudgetAmount | number: '1.2-2' }} </strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-label"> Total Spent </span>
+
+        <strong class="summary-value"> ₹{{ totalSpent | number: '1.2-2' }} </strong>
+      </div>
+
+      <div class="summary-card">
+        <span class="summary-label"> Total Remaining </span>
+
+        <strong class="summary-value"> ₹{{ totalRemaining | number: '1.2-2' }} </strong>
+      </div>
+    </div>
+
+    <!-- BUDGETS -->
+
+    <section class="budgets-section">
+      <div class="section-header">
+        <div>
+          <h2>Your Budgets</h2>
+          <p>Track your spending across all budgets.</p>
+        </div>
+
+        <a routerLink="/budgets" class="view-all"> View All </a>
+      </div>
+
+      @if (budgets.length === 0) {
+        <div class="empty-state">
+          <h3>No budgets yet</h3>
+
+          <p>Create your first budget to start tracking your spending.</p>
+
+          <a routerLink="/budgets/new" class="add-budget-button"> + Create Budget </a>
+        </div>
+      }
+
+      @if (budgets.length > 0) {
+        <div class="budget-grid">
+          @for (budget of budgets; track budget.id) {
+            <div class="budget-card">
+              <div class="budget-card-header">
+                <div>
+                  <h3>{{ budget.name }}</h3>
+
+                  <span class="budget-period"> {{ budget.month }}/{{ budget.year }} </span>
+                </div>
+
+                <a [routerLink]="['/budgets', budget.id]" class="view-button"> View </a>
+              </div>
+
+              <div class="budget-amounts">
+                <div>
+                  <span>Budget</span>
+                  <strong> ₹{{ budget.amount | number: '1.2-2' }} </strong>
+                </div>
+
+                <div>
+                  <span>Spent</span>
+                  <strong> ₹{{ budget.spentAmount | number: '1.2-2' }} </strong>
+                </div>
+
+                <div>
+                  <span>Remaining</span>
+                  <strong> ₹{{ budget.remainingAmount | number: '1.2-2' }} </strong>
+                </div>
+              </div>
+
+              <div class="progress-info">
+                <span> Spending Progress </span>
+
+                <strong> {{ budget.percentageSpent | number: '1.0-1' }}% </strong>
+              </div>
+
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgressWidth(budget)"></div>
+              </div>
+
+              @if (getAlertMessage(budget)) {
+                <div class="budget-alert">
+                  {{ getAlertMessage(budget) }}
+                </div>
+              }
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

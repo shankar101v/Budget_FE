@@ -1,0 +1,29 @@
+<nav class="navbar">
+  <div class="navbar-brand">
+    <a routerLink="/dashboard"> Budget App </a>
+  </div>
+
+  @if (authService.isAuthenticated()) {
+    <div class="navbar-links">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Dashboard
+      </a>
+
+      <a routerLink="/budgets" routerLinkActive="active"> Budgets </a>
+
+      <a routerLink="/transactions" routerLinkActive="active"> Transactions </a>
+    </div>
+
+    <div class="navbar-actions">
+      <span class="user-name">
+        {{ authService.getCurrentUser()?.name }}
+      </span>
+
+      <button type="button" (click)="logout()">Logout</button>
+    </div>
+  }
+</nav>

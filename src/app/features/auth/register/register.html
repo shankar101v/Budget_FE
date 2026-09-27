@@ -1,0 +1,77 @@
+<div class="register-container">
+  <div class="register-card">
+    <h1>Budget App</h1>
+
+    <h2>Create Account</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+
+      <div class="form-group">
+        <label for="name">Name</label>
+
+        <input id="name" type="text" formControlName="name" placeholder="Enter your name" />
+
+        @if (registerForm.controls.name.touched && registerForm.controls.name.invalid) {
+          <small class="error"> Name must be at least 2 characters. </small>
+        }
+      </div>
+
+      <!-- Email -->
+
+      <div class="form-group">
+        <label for="email">Email</label>
+
+        <input id="email" type="email" formControlName="email" placeholder="Enter your email" />
+
+        @if (registerForm.controls.email.touched && registerForm.controls.email.invalid) {
+          <small class="error"> Please enter a valid email. </small>
+        }
+      </div>
+
+      <!-- Password -->
+
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+
+        @if (registerForm.controls.password.touched && registerForm.controls.password.invalid) {
+          <small class="error"> Password must be at least 6 characters. </small>
+        }
+      </div>
+
+      <!-- Error -->
+
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- Success -->
+
+      @if (successMessage) {
+        <div class="success-message">
+          {{ successMessage }}
+        </div>
+      }
+
+      <!-- Submit -->
+
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Creating account...' : 'Register' }}
+      </button>
+    </form>
+
+    <p>
+      Already have an account?
+      <a routerLink="/login">Login</a>
+    </p>
+  </div>
+</div>

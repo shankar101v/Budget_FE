@@ -1,0 +1,115 @@
+<div class="transaction-form-page">
+  <div class="page-header">
+    <h1>
+      @if (isEditMode) {
+        Edit Transaction
+      } @else {
+        Add Transaction
+      }
+    </h1>
+
+    <p>
+      @if (isEditMode) {
+        Update your transaction details.
+      } @else {
+        Add an expense to your budget.
+      }
+    </p>
+  </div>
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="loading">Loading...</div>
+  }
+
+  @if (!isLoading) {
+    <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="budget"> Budget </label>
+
+        <select id="budget" formControlName="budgetId">
+          <option [ngValue]="null">Select Budget</option>
+
+          @for (budget of budgets; track budget.id) {
+            <option [ngValue]="budget.id">
+              {{ budget.name }}
+              - ₹{{ budget.amount }}
+            </option>
+          }
+        </select>
+
+        @if (
+          transactionForm.controls.budgetId.touched && transactionForm.controls.budgetId.invalid
+        ) {
+          <small class="error"> Please select a budget. </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="amount"> Amount </label>
+
+        <input
+          id="amount"
+          type="number"
+          formControlName="amount"
+          placeholder="Enter transaction amount"
+        />
+
+        @if (transactionForm.controls.amount.touched && transactionForm.controls.amount.invalid) {
+          <small class="error"> Amount must be greater than 0. </small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="description"> Description </label>
+
+        <input
+          id="description"
+          type="text"
+          formControlName="description"
+          placeholder="e.g. Grocery shopping"
+        />
+
+        <small> Optional </small>
+      </div>
+
+      <div class="form-group">
+        <label for="transactionDate"> Transaction Date </label>
+
+        <input id="transactionDate" type="date" formControlName="transactionDate" />
+
+        @if (
+          transactionForm.controls.transactionDate.touched &&
+          transactionForm.controls.transactionDate.invalid
+        ) {
+          <small class="error"> Please select a date. </small>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="cancel()" [disabled]="isSubmitting">Cancel</button>
+
+        <button type="submit" [disabled]="isSubmitting">
+          @if (isSubmitting) {
+            @if (isEditMode) {
+              Updating...
+            } @else {
+              Adding...
+            }
+          } @else {
+            @if (isEditMode) {
+              Update Transaction
+            } @else {
+              Add Transaction
+            }
+          }
+        </button>
+      </div>
+    </form>
+  }
+</div>

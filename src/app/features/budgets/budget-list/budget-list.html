@@ -1,0 +1,74 @@
+<div class="budget-page">
+  <div class="page-header">
+    <div>
+      <h1>My Budgets</h1>
+      <p>Manage your monthly budgets</p>
+    </div>
+
+    <button routerLink="/budgets/new">+ Add Budget</button>
+  </div>
+
+  @if (isLoading) {
+    <div class="message">Loading budgets...</div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (!isLoading && !errorMessage && budgets.length === 0) {
+    <div class="empty-state">
+      <h2>No budgets yet</h2>
+
+      <p>Create your first budget to start tracking your expenses.</p>
+
+      <button routerLink="/budgets/new">Create Budget</button>
+    </div>
+  }
+
+  @if (!isLoading && budgets.length > 0) {
+    <div class="budget-grid">
+      @for (budget of budgets; track budget.id) {
+        <div class="budget-card">
+          <div class="budget-card-header">
+            <h2>{{ budget.name }}</h2>
+
+            <span> {{ budget.month }}/{{ budget.year }} </span>
+          </div>
+
+          <div class="budget-amount">₹{{ budget.amount }}</div>
+
+          <div class="budget-info">
+            <div>
+              <span>Spent</span>
+              <strong>₹{{ budget.spentAmount }}</strong>
+            </div>
+
+            <div>
+              <span>Remaining</span>
+              <strong>₹{{ budget.remainingAmount }}</strong>
+            </div>
+          </div>
+
+          <div class="progress-section">
+            <div class="progress-header">
+              <span>Spent</span>
+
+              <strong> {{ budget.percentageSpent }}% </strong>
+            </div>
+
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="budget.percentageSpent"></div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button [routerLink]="['/budgets', budget.id]">Open</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

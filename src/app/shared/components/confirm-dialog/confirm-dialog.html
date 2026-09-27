@@ -1,0 +1,21 @@
+<div class="dialog-backdrop">
+  <div class="dialog" role="dialog" aria-modal="true">
+    <h2>
+      {{ title }}
+    </h2>
+
+    <p>
+      {{ message }}
+    </p>
+
+    <div class="dialog-actions">
+      <button type="button" class="cancel-button" (click)="onCancel()">
+        {{ cancelText }}
+      </button>
+
+      <button type="button" class="confirm-button" (click)="onConfirm()">
+        {{ confirmText }}
+      </button>
+    </div>
+  </div>
+</div>

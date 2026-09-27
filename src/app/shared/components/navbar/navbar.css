@@ -1,0 +1,55 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 24px;
+
+  border-bottom: 1px solid #ddd;
+
+  background: white;
+}
+
+.navbar-brand a {
+  font-size: 20px;
+  font-weight: 700;
+
+  text-decoration: none;
+  color: #222;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #555;
+}
+
+.navbar-links a.active {
+  font-weight: 600;
+  color: #222;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-name {
+  font-weight: 500;
+}
+
+.navbar-actions button {
+  padding: 8px 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  background: white;
+
+  cursor: pointer;
+}
