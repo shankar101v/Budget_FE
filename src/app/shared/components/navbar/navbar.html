@@ -1,29 +1,54 @@
 <nav class="navbar">
+  <!-- Brand -->
   <div class="navbar-brand">
-    <a routerLink="/dashboard"> Budget App </a>
+    <a routerLink="/dashboard">
+      <span class="brand-icon"> $ </span>
+
+      <span class="brand-name"> Budgetly </span>
+    </a>
   </div>
 
   @if (authService.isAuthenticated()) {
-    <div class="navbar-links">
+    <!-- Navigation -->
+    <button
+      type="button"
+      class="mobile-menu-button"
+      (click)="toggleMobileMenu()"
+      aria-label="Toggle navigation menu"
+    >
+      ☰
+    </button>
+    <div class="navbar-links" [class.mobile-open]="isMobileMenuOpen">
       <a
         routerLink="/dashboard"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
+        (click)="closeMobileMenu()"
       >
         Dashboard
       </a>
 
-      <a routerLink="/budgets" routerLinkActive="active"> Budgets </a>
+      <a routerLink="/budgets" routerLinkActive="active" (click)="closeMobileMenu()"> Budgets </a>
 
-      <a routerLink="/transactions" routerLinkActive="active"> Transactions </a>
+      <a routerLink="/transactions" routerLinkActive="active" (click)="closeMobileMenu()">
+        Transactions
+      </a>
+      <a routerLink="/profile" routerLinkActive="active" (click)="closeMobileMenu()">Profile</a>
     </div>
 
+    <!-- User Actions -->
     <div class="navbar-actions">
-      <span class="user-name">
-        {{ authService.getCurrentUser()?.name }}
-      </span>
+      <div class="user-profile">
+        <a routerLink="/profile" class="user-avatar">
+          {{ authService.getCurrentUser()?.name?.charAt(0)?.toUpperCase() }}
+        </a>
 
-      <button type="button" (click)="logout()">Logout</button>
+        <span class="user-name">
+          {{ authService.getCurrentUser()?.name }}
+        </span>
+      </div>
+
+      <button type="button" class="logout-button" (click)="logout()">Logout</button>
     </div>
   }
 </nav>

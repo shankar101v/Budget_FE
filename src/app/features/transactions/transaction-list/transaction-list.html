@@ -1,93 +1,126 @@
-<div class="transaction-list-page">
-  <div class="page-header">
-    <div>
+<div class="transaction-page">
+  <header class="page-header">
+    <div class="page-heading">
+      <span class="page-eyebrow"> Spending activity </span>
+
       <h1>Transactions</h1>
 
-      <p>View and manage your expenses.</p>
+      <p>View and manage your recent income and expenses.</p>
     </div>
 
-    <a routerLink="/transactions/new" class="add-button"> + Add Transaction </a>
-  </div>
+    <button type="button" class="add-transaction-button" routerLink="/transactions/new">
+      <span>+</span>
+      Add Transaction
+    </button>
+  </header>
 
   @if (isLoading) {
-    <div class="loading">Loading transactions...</div>
+    <div class="page-state loading-state">
+      <app-loading-spinner></app-loading-spinner>
+
+      <div>
+        <p>Please wait while we fetch your transaction history.</p>
+      </div>
+    </div>
   }
 
   @if (errorMessage) {
-    <div class="error-message">
-      {{ errorMessage }}
+    <div class="page-state error-state">
+      <div class="state-icon">!</div>
+
+      <div>
+        <h3>Unable to load transactions</h3>
+        <p>{{ errorMessage }}</p>
+      </div>
     </div>
   }
 
-  @if (!isLoading && transactions.length === 0) {
+  @if (!isLoading && !errorMessage && transactions.length === 0) {
     <div class="empty-state">
-      <h2>No Transactions Yet</h2>
+      <div class="empty-icon">₹</div>
 
-      <p>Add your first transaction to start tracking expenses.</p>
+      <h2>No transactions yet</h2>
 
-      <a routerLink="/transactions/new" class="add-button"> Add Transaction </a>
+      <p>Add your first transaction to start tracking your spending activity.</p>
+
+      <button type="button" class="add-transaction-button" routerLink="/transactions/new">
+        <span>+</span>
+        Add Transaction
+      </button>
     </div>
   }
 
-  @if (!isLoading && transactions.length > 0) {
-    <div class="transaction-table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Amount</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Budget</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+  @if (!isLoading && !errorMessage && transactions.length > 0) {
+    <section class="transactions-section">
+      <div class="section-header">
+        <div>
+          <h2>Recent transactions</h2>
 
-        <tbody>
-          @for (transaction of transactions; track transaction.id) {
-            <tr>
-              <td>₹{{ transaction.amount }}</td>
+          <p>
+            {{ transactions.length }}
+            {{ transactions.length === 1 ? 'transaction' : 'transactions' }}
+            available
+          </p>
+        </div>
+      </div>
 
-              <td>
-                {{ transaction.description || 'No description' }}
-              </td>
+      <div class="transaction-list">
+        @for (transaction of transactions; track transaction.id) {
+          <article class="transaction-card">
+            <div class="transaction-main">
+              <div class="transaction-icon">₹</div>
 
-              <td>
-                {{ transaction.transactionDate }}
-              </td>
+              <div class="transaction-info">
+                <h3>
+                  {{ transaction.description || 'Untitled transaction' }}
+                </h3>
 
-              <td>
-                {{ getBudgetName(transaction.budgetId) }}
-              </td>
+                <div class="transaction-meta">
+                  <span>
+                    {{ transaction.transactionDate }}
+                  </span>
 
-              <td>
-                <a [routerLink]="['/transactions', transaction.id, 'edit']" class="edit-button">
-                  Edit
-                </a>
+                  @if (transaction.budgetId) {
+                    <span class="meta-dot"> • </span>
 
-                <button
-                  type="button"
-                  class="delete-button"
-                  (click)="deleteTransaction(transaction)"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+                    <span> Budget #{{ transaction.budgetId }} </span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="transaction-right">
+              <strong class="transaction-amount expense-amount">
+                -₹{{ transaction.amount }}
+              </strong>
+
+              <span class="transaction-type expense-type"> Expense </span>
+            </div>
+            <div class="transaction-actions">
+              <button
+                type="button"
+                class="edit-button"
+                [routerLink]="['/transactions', transaction.id, 'edit']"
+              >
+                Edit
+              </button>
+
+              <button type="button" class="delete-button" (click)="deleteTransaction(transaction)">
+                Delete
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
   }
 </div>
-
-@if (showDeleteDialog) {
-  <app-confirm-dialog
-    title="Delete Transaction"
-    message="Are you sure you want to delete this transaction?"
-    confirmText="Delete"
-    cancelText="Cancel"
-    (confirmed)="confirmDeleteTransaction()"
-    (cancelled)="cancelDelete()"
-  >
-  </app-confirm-dialog>
-}
+<app-confirm-dialog
+  *ngIf="showDeleteDialog"
+  title="Delete Transaction"
+  message="Are you sure you want to delete this transaction?"
+  confirmText="Delete"
+  cancelText="Cancel"
+  (confirmed)="confirmDeleteTransaction()"
+  (cancelled)="cancelDelete()"
+></app-confirm-dialog>

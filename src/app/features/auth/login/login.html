@@ -1,49 +1,87 @@
-<div class="login-container">
+<div class="login-page">
   <div class="login-card">
-    <h1>Budget App</h1>
+    <!-- Logo / Brand -->
+    <div class="brand">
+      <div class="brand-icon">$</div>
 
-    <h2>Login</h2>
+      <span>Budgetly</span>
+    </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <!-- Heading -->
+    <div class="login-header">
+      <h1>Welcome back</h1>
+
+      <p>Login to manage your budget and expenses.</p>
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email -->
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email"> Email address </label>
 
-        <input id="email" type="email" formControlName="email" placeholder="Enter your email" />
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+          autocomplete="email"
+        />
 
         @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {
-          <small class="error"> Please enter a valid email. </small>
+          <small class="error"> Please enter a valid email address. </small>
         }
       </div>
 
+      <!-- Password -->
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password"> Password </label>
 
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          placeholder="Enter your password"
-        />
+        <div class="password-input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            id="password"
+            placeholder="Enter your password"
+          />
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
 
         @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
           <small class="error"> Password is required. </small>
         }
       </div>
 
+      <!-- API Error -->
       @if (errorMessage) {
         <div class="error-message">
           {{ errorMessage }}
         </div>
       }
 
-      <button type="submit" [disabled]="isLoading">
-        {{ isLoading ? 'Logging in...' : 'Login' }}
+      <!-- Login Button -->
+      <button type="submit" class="login-button" [disabled]="isLoading">
+        @if (isLoading) {
+          Logging in...
+        } @else {
+          Login
+        }
       </button>
     </form>
 
-    <p>
+    <!-- Register -->
+    <p class="register-text">
       Don't have an account?
-      <a routerLink="/register">Register</a>
+
+      <a routerLink="/register"> Create an account </a>
     </p>
   </div>
 </div>

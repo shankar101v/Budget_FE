@@ -1,65 +1,93 @@
 <div class="budget-detail-page">
+  <!-- Loading -->
   @if (isLoading) {
-    <div class="loading">Loading budget...</div>
+    <app-loading-spinner></app-loading-spinner>
   }
 
+  <!-- Error -->
   @if (errorMessage) {
     <div class="error-message">
-      {{ errorMessage }}
+      <span class="error-icon">!</span>
+
+      <div>
+        <strong>Something went wrong</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
     </div>
   }
 
   @if (!isLoading && budget) {
+    <!-- Page Header -->
     <div class="page-header">
-      <div>
-        <h1>
-          {{ budget.name }}
-        </h1>
+      <div class="header-content">
+        <a routerLink="/budgets" class="back-button"> ← Back to Budgets </a>
 
-        <p>
-          Budget details for
-          {{ budget.month }}/{{ budget.year }}
-        </p>
+        <div class="budget-title-row">
+          <div class="budget-icon">₹</div>
+
+          <div>
+            <h1>{{ budget.name }}</h1>
+
+            <p>
+              {{ budget.month }}/{{ budget.year }}
+              <span class="separator">•</span>
+              Budget overview
+            </p>
+          </div>
+        </div>
       </div>
 
-      <a routerLink="/budgets" class="back-button"> ← Back to Budgets </a>
+      <a [routerLink]="['/budgets', budget.id, 'edit']" class="header-edit-button"> Edit Budget </a>
     </div>
 
     <!-- Budget Summary -->
-
     <div class="budget-summary">
-      <div class="summary-card">
-        <span> Total Budget </span>
+      <div class="summary-card total-card">
+        <div class="summary-icon">₹</div>
 
-        <strong> ₹{{ budget.amount }} </strong>
+        <div>
+          <span>Total Budget</span>
+          <strong>₹{{ budget.amount }}</strong>
+        </div>
       </div>
 
-      <div class="summary-card">
-        <span> Spent </span>
+      <div class="summary-card spent-card">
+        <div class="summary-icon">↗</div>
 
-        <strong> ₹{{ budget.spentAmount }} </strong>
+        <div>
+          <span>Spent</span>
+          <strong>₹{{ budget.spentAmount }}</strong>
+        </div>
       </div>
 
-      <div class="summary-card">
-        <span> Remaining </span>
+      <div class="summary-card remaining-card">
+        <div class="summary-icon">✓</div>
 
-        <strong> ₹{{ budget.remainingAmount }} </strong>
+        <div>
+          <span>Remaining</span>
+          <strong>₹{{ budget.remainingAmount }}</strong>
+        </div>
       </div>
 
-      <div class="summary-card">
-        <span> Percentage Spent </span>
+      <div class="summary-card percentage-card">
+        <div class="summary-icon">%</div>
 
-        <strong> {{ budget.percentageSpent }}% </strong>
+        <div>
+          <span>Used</span>
+          <strong>{{ budget.percentageSpent }}%</strong>
+        </div>
       </div>
     </div>
 
-    <!-- Budget Progress -->
-
-    <div class="budget-progress">
+    <!-- Budget Usage -->
+    <div class="budget-progress-card">
       <div class="progress-header">
-        <span> Budget Usage </span>
+        <div>
+          <h2>Budget Usage</h2>
+          <p>Track how much of your budget has been spent.</p>
+        </div>
 
-        <span> {{ budget.percentageSpent }}% </span>
+        <strong>{{ budget.percentageSpent }}%</strong>
       </div>
 
       <div class="progress-bar">
@@ -68,10 +96,7 @@
     </div>
 
     <!-- Budget Actions -->
-
     <div class="budget-actions">
-      <a [routerLink]="['/budgets', budget.id, 'edit']" class="edit-button"> Edit Budget </a>
-
       <a
         [routerLink]="['/transactions/new']"
         [queryParams]="{ budgetId: budget.id }"
@@ -84,47 +109,56 @@
     </div>
 
     <!-- Transactions -->
-
     <div class="transactions-section">
       <div class="section-header">
         <div>
           <h2>Transactions</h2>
 
-          <p>Transactions for {{ budget.name }}</p>
+          <p>Recent expenses for {{ budget.name }}</p>
         </div>
 
         <a
           [routerLink]="['/transactions/new']"
           [queryParams]="{ budgetId: budget.id }"
-          class="add-button"
+          class="section-add-button"
         >
           + Add Transaction
         </a>
       </div>
 
+      <!-- Transaction Loading -->
       @if (isTransactionsLoading) {
-        <div class="loading">Loading transactions...</div>
+        <app-loading-spinner></app-loading-spinner>
       }
 
+      <!-- Empty State -->
       @if (!isTransactionsLoading && transactions.length === 0) {
         <div class="empty-state">
+          <div class="empty-icon">₹</div>
+
           <h3>No Transactions Yet</h3>
 
-          <p>Add a transaction to start tracking expenses for this budget.</p>
+          <p>Add your first transaction to start tracking expenses for this budget.</p>
+
+          <a
+            [routerLink]="['/transactions/new']"
+            [queryParams]="{ budgetId: budget.id }"
+            class="empty-add-button"
+          >
+            Add Transaction
+          </a>
         </div>
       }
 
+      <!-- Transaction List -->
       @if (!isTransactionsLoading && transactions.length > 0) {
         <div class="transaction-table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>Amount</th>
-
-                <th>Description</th>
-
+                <th>Transaction</th>
                 <th>Date</th>
-
+                <th>Amount</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -132,28 +166,47 @@
             <tbody>
               @for (transaction of transactions; track transaction.id) {
                 <tr>
-                  <td>₹{{ transaction.amount }}</td>
-
                   <td>
-                    {{ transaction.description || 'No description' }}
+                    <div class="transaction-info">
+                      <div class="transaction-icon">₹</div>
+
+                      <div>
+                        <strong>
+                          {{ transaction.description || 'No description' }}
+                        </strong>
+
+                        <span> Expense </span>
+                      </div>
+                    </div>
                   </td>
 
                   <td>
-                    {{ transaction.transactionDate }}
+                    <span class="transaction-date">
+                      {{ transaction.transactionDate }}
+                    </span>
                   </td>
 
                   <td>
-                    <a [routerLink]="['/transactions', transaction.id, 'edit']" class="edit-button">
-                      Edit
-                    </a>
+                    <strong class="transaction-amount"> -₹{{ transaction.amount }} </strong>
+                  </td>
 
-                    <button
-                      type="button"
-                      class="delete-button"
-                      (click)="deleteTransaction(transaction)"
-                    >
-                      Delete
-                    </button>
+                  <td>
+                    <div class="transaction-actions">
+                      <a
+                        [routerLink]="['/transactions', transaction.id, 'edit']"
+                        class="edit-button"
+                      >
+                        Edit
+                      </a>
+
+                      <button
+                        type="button"
+                        class="transaction-delete-button"
+                        (click)="deleteTransaction(transaction)"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               }
@@ -164,6 +217,8 @@
     </div>
   }
 </div>
+
+<!-- Delete Budget Confirmation -->
 @if (showDeleteDialog) {
   <app-confirm-dialog
     title="Delete Budget"

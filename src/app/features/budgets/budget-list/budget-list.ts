@@ -2,12 +2,14 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BudgetService } from '../../../services/budget.service';
 import { Budget } from '../../../models/budget';
+import { DecimalPipe } from '@angular/common';
+import { LoadingSpinner } from '../../../shared/components/loading-spinner/loading-spinner';
 
 
 @Component({
   selector: 'app-budget-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe,LoadingSpinner],
   templateUrl: './budget-list.html',
   styleUrl: './budget-list.css'
 })

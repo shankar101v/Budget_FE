@@ -16,6 +16,11 @@ import { Auth } from '../../../core/auth/auth';
   styleUrl: './register.css'
 })
 export class Register {
+  showPassword = false;
+
+togglePasswordVisibility(): void {
+  this.showPassword = !this.showPassword;
+}
 
   registerForm;
 

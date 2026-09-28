@@ -1,113 +1,218 @@
 <div class="budget-form-page">
+
+  <!-- Page Header -->
   <div class="page-header">
-    @if (isEditMode) {
-      <h1>Edit Budget</h1>
+    <div class="page-header-icon">
+      ₹
+    </div>
 
-      <p>Update your budget details.</p>
-    } @else {
-      <h1>Create Budget</h1>
-
-      <p>Create a monthly budget to track your expenses.</p>
-    }
+    <div>
+      @if (isEditMode) {
+        <h1>Edit Budget</h1>
+        <p>Update your budget details and keep your spending on track.</p>
+      } @else {
+        <h1>Create Budget</h1>
+        <p>Create a monthly budget to track your expenses.</p>
+      }
+    </div>
   </div>
 
+
+  <!-- Error Message -->
   @if (errorMessage) {
     <div class="error-message">
-      {{ errorMessage }}
+      <span class="error-icon">!</span>
+
+      <div>
+        <strong>Something went wrong</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
     </div>
   }
 
-  <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
-    <!-- Budget Name -->
 
-    <div class="form-group">
-      <label for="name"> Budget Name </label>
+  <!-- Budget Form Card -->
+  <div class="form-card">
 
-      <input
-        id="name"
-        type="text"
-        formControlName="name"
-        placeholder="e.g. Food, Travel, Shopping"
-      />
-
-      @if (budgetForm.controls.name.touched && budgetForm.controls.name.invalid) {
-        <small class="error">
-          Budget name is required and must contain at least 2 characters.
-        </small>
-      }
+    <div class="form-card-header">
+      <h2>Budget Details</h2>
+      <p>Enter the details for your monthly budget.</p>
     </div>
 
-    <!-- Amount -->
 
-    <div class="form-group">
-      <label for="amount"> Budget Amount </label>
+    <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
 
-      <input id="amount" type="number" formControlName="amount" placeholder="Enter budget amount" />
+      <!-- Budget Name -->
+      <div class="form-group">
 
-      @if (budgetForm.controls.amount.touched && budgetForm.controls.amount.invalid) {
-        <small class="error"> Amount must be greater than 0. </small>
-      }
-    </div>
+        <label for="name">
+          Budget Name
+        </label>
 
-    <!-- Month -->
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="e.g. Food, Travel, Shopping"
+          autocomplete="off"
+        />
 
-    <div class="form-group">
-      <label for="month"> Month </label>
+        <span class="field-hint">
+          Give your budget a name that is easy to recognize.
+        </span>
 
-      <select id="month" formControlName="month">
-        <option [ngValue]="null">Select Month</option>
-
-        <option [ngValue]="1">January</option>
-        <option [ngValue]="2">February</option>
-        <option [ngValue]="3">March</option>
-        <option [ngValue]="4">April</option>
-        <option [ngValue]="5">May</option>
-        <option [ngValue]="6">June</option>
-        <option [ngValue]="7">July</option>
-        <option [ngValue]="8">August</option>
-        <option [ngValue]="9">September</option>
-        <option [ngValue]="10">October</option>
-        <option [ngValue]="11">November</option>
-        <option [ngValue]="12">December</option>
-      </select>
-
-      @if (budgetForm.controls.month.touched && budgetForm.controls.month.invalid) {
-        <small class="error"> Please select a month. </small>
-      }
-    </div>
-
-    <!-- Year -->
-
-    <div class="form-group">
-      <label for="year"> Year </label>
-
-      <input id="year" type="number" formControlName="year" placeholder="e.g. 2026" />
-
-      @if (budgetForm.controls.year.touched && budgetForm.controls.year.invalid) {
-        <small class="error"> Please enter a valid year. </small>
-      }
-    </div>
-
-    <!-- Buttons -->
-
-    <div class="form-actions">
-      <button type="button" (click)="cancel()" [disabled]="isSubmitting">Cancel</button>
-
-      <button type="submit" [disabled]="isSubmitting">
-        @if (isSubmitting) {
-          @if (isEditMode) {
-            Updating...
-          } @else {
-            Creating...
-          }
-        } @else {
-          @if (isEditMode) {
-            Update Budget
-          } @else {
-            Create Budget
-          }
+        @if (budgetForm.controls.name.touched && budgetForm.controls.name.invalid) {
+          <small class="error">
+            Budget name is required and must contain at least 2 characters.
+          </small>
         }
-      </button>
-    </div>
-  </form>
+
+      </div>
+
+
+      <!-- Amount -->
+      <div class="form-group">
+
+        <label for="amount">
+          Budget Amount
+        </label>
+
+        <div class="input-with-prefix">
+          <span class="input-prefix">₹</span>
+
+          <input
+            id="amount"
+            type="number"
+            formControlName="amount"
+            placeholder="Enter budget amount"
+            min="1"
+          />
+        </div>
+
+        <span class="field-hint">
+          Enter the maximum amount you plan to spend.
+        </span>
+
+        @if (budgetForm.controls.amount.touched && budgetForm.controls.amount.invalid) {
+          <small class="error">
+            Amount must be greater than 0.
+          </small>
+        }
+
+      </div>
+
+
+      <!-- Month & Year -->
+      <div class="form-row">
+
+        <!-- Month -->
+        <div class="form-group">
+
+          <label for="month">
+            Month
+          </label>
+
+          <select id="month" formControlName="month">
+
+            <option [ngValue]="null">
+              Select Month
+            </option>
+
+            <option [ngValue]="1">January</option>
+            <option [ngValue]="2">February</option>
+            <option [ngValue]="3">March</option>
+            <option [ngValue]="4">April</option>
+            <option [ngValue]="5">May</option>
+            <option [ngValue]="6">June</option>
+            <option [ngValue]="7">July</option>
+            <option [ngValue]="8">August</option>
+            <option [ngValue]="9">September</option>
+            <option [ngValue]="10">October</option>
+            <option [ngValue]="11">November</option>
+            <option [ngValue]="12">December</option>
+
+          </select>
+
+          @if (budgetForm.controls.month.touched && budgetForm.controls.month.invalid) {
+            <small class="error">
+              Please select a month.
+            </small>
+          }
+
+        </div>
+
+
+        <!-- Year -->
+        <div class="form-group">
+
+          <label for="year">
+            Year
+          </label>
+
+          <input
+            id="year"
+            type="number"
+            formControlName="year"
+            placeholder="e.g. 2026"
+            min="2000"
+            max="2100"
+          />
+
+          @if (budgetForm.controls.year.touched && budgetForm.controls.year.invalid) {
+            <small class="error">
+              Please enter a valid year.
+            </small>
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="cancel()"
+          [disabled]="isSubmitting"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="isSubmitting"
+        >
+
+          @if (isSubmitting) {
+
+            <span class="button-spinner"></span>
+
+            @if (isEditMode) {
+              Updating...
+            } @else {
+              Creating...
+            }
+
+          } @else {
+
+            @if (isEditMode) {
+              Update Budget
+            } @else {
+              Create Budget
+            }
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
 </div>

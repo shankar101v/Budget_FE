@@ -12,6 +12,16 @@ import { Auth } from '../../../core/auth/auth';
 })
 export class Navbar {
 
+  isMobileMenuOpen = false;
+
+toggleMobileMenu(): void {
+  this.isMobileMenuOpen = !this.isMobileMenuOpen;
+}
+
+closeMobileMenu(): void {
+  this.isMobileMenuOpen = false;
+}
+
   constructor(
     public authService: Auth,
     private router: Router
@@ -24,5 +34,13 @@ export class Navbar {
     this.router.navigate(['/login']);
 
   }
+
+  navigateFromMobileMenu(route: string): void {
+  this.isMobileMenuOpen = false;
+
+  setTimeout(() => {
+    this.router.navigate([route]);
+  }, 200);
+}
 
 }

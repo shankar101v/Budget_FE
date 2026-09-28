@@ -1,74 +1,169 @@
 <div class="budget-page">
-  <div class="page-header">
-    <div>
+  <!-- =====================================================
+       PAGE HEADER
+       ===================================================== -->
+
+  <header class="page-header">
+    <div class="page-heading">
+      <span class="page-eyebrow"> Financial planning </span>
+
       <h1>My Budgets</h1>
-      <p>Manage your monthly budgets</p>
+
+      <p>Create and manage your monthly spending limits.</p>
     </div>
 
-    <button routerLink="/budgets/new">+ Add Budget</button>
-  </div>
+    <button type="button" class="add-budget-button" routerLink="/budgets/new">
+      <span>+</span>
+      Add Budget
+    </button>
+  </header>
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
   @if (isLoading) {
-    <div class="message">Loading budgets...</div>
-  }
+    <div class="page-state loading-state">
+      <app-loading-spinner></app-loading-spinner>
 
-  @if (errorMessage) {
-    <div class="error-message">
-      {{ errorMessage }}
+      <div>
+        <p>Please wait while we fetch your budget information.</p>
+      </div>
     </div>
   }
+
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
+  @if (errorMessage) {
+    <div class="page-state error-state">
+      <div class="state-icon">!</div>
+
+      <div>
+        <h3>Unable to load budgets</h3>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+      </div>
+    </div>
+  }
+
+  <!-- =====================================================
+       EMPTY STATE
+       ===================================================== -->
 
   @if (!isLoading && !errorMessage && budgets.length === 0) {
     <div class="empty-state">
+      <div class="empty-icon">₹</div>
+
       <h2>No budgets yet</h2>
 
-      <p>Create your first budget to start tracking your expenses.</p>
+      <p>Create your first budget to start tracking your monthly expenses.</p>
 
-      <button routerLink="/budgets/new">Create Budget</button>
+      <button type="button" class="add-budget-button" routerLink="/budgets/new">
+        <span>+</span>
+        Create Budget
+      </button>
     </div>
   }
 
-  @if (!isLoading && budgets.length > 0) {
-    <div class="budget-grid">
-      @for (budget of budgets; track budget.id) {
-        <div class="budget-card">
-          <div class="budget-card-header">
-            <h2>{{ budget.name }}</h2>
+  <!-- =====================================================
+       BUDGET LIST
+       ===================================================== -->
 
-            <span> {{ budget.month }}/{{ budget.year }} </span>
-          </div>
+  @if (!isLoading && !errorMessage && budgets.length > 0) {
+    <section class="budgets-section">
+      <div class="section-header">
+        <div>
+          <h2>Your budgets</h2>
 
-          <div class="budget-amount">₹{{ budget.amount }}</div>
-
-          <div class="budget-info">
-            <div>
-              <span>Spent</span>
-              <strong>₹{{ budget.spentAmount }}</strong>
-            </div>
-
-            <div>
-              <span>Remaining</span>
-              <strong>₹{{ budget.remainingAmount }}</strong>
-            </div>
-          </div>
-
-          <div class="progress-section">
-            <div class="progress-header">
-              <span>Spent</span>
-
-              <strong> {{ budget.percentageSpent }}% </strong>
-            </div>
-
-            <div class="progress-bar">
-              <div class="progress-fill" [style.width.%]="budget.percentageSpent"></div>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button [routerLink]="['/budgets', budget.id]">Open</button>
-          </div>
+          <p>
+            {{ budgets.length }}
+            {{ budgets.length === 1 ? 'budget' : 'budgets' }}
+            available
+          </p>
         </div>
-      }
-    </div>
+      </div>
+
+      <div class="budget-grid">
+        @for (budget of budgets; track budget.id) {
+          <article class="budget-card">
+            <!-- Card Header -->
+
+            <div class="budget-card-header">
+              <div class="budget-title">
+                <div class="budget-icon">₹</div>
+
+                <div class="budget-title-text">
+                  <h2>
+                    {{ budget.name }}
+                  </h2>
+
+                  <span> {{ budget.month }}/{{ budget.year }} </span>
+                </div>
+              </div>
+
+              <span class="budget-status"> Monthly </span>
+            </div>
+
+            <!-- Main Budget Amount -->
+
+            <div class="budget-amount-section">
+              <span class="amount-label"> Budget limit </span>
+
+              <strong class="budget-amount"> ₹{{ budget.amount | number: '1.0-2' }} </strong>
+            </div>
+
+            <!-- Spending Information -->
+
+            <div class="budget-info">
+              <div class="info-item">
+                <span> Spent </span>
+
+                <strong class="spent-value"> ₹{{ budget.spentAmount | number: '1.0-2' }} </strong>
+              </div>
+
+              <div class="info-divider"></div>
+
+              <div class="info-item">
+                <span> Remaining </span>
+
+                <strong class="remaining-value">
+                  ₹{{ budget.remainingAmount | number: '1.0-2' }}
+                </strong>
+              </div>
+            </div>
+
+            <!-- Progress -->
+
+            <div class="progress-section">
+              <div class="progress-header">
+                <span> Spending progress </span>
+
+                <strong> {{ budget.percentageSpent | number: '1.0-1' }}% </strong>
+              </div>
+
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  [style.width.%]="budget.percentageSpent > 100 ? 100 : budget.percentageSpent"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Card Action -->
+
+            <div class="card-actions">
+              <button type="button" class="open-button" [routerLink]="['/budgets', budget.id]">
+                View budget
+                <span>→</span>
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
   }
 </div>

@@ -7,11 +7,12 @@ import { Transaction } from '../../../models/transaction';
 import { BudgetService } from '../../../services/budget.service';
 import { TransactionService } from '../../../services/transaction.service';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { LoadingSpinner } from '../../../shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-budget-detail',
   standalone: true,
-  imports: [RouterLink, ConfirmDialog],
+  imports: [RouterLink, ConfirmDialog, LoadingSpinner],
   templateUrl: './budget-detail.html',
   styleUrl: './budget-detail.css'
 })

@@ -11,6 +11,8 @@ import { Auth } from '../../../core/auth/auth';
 })
 export class Login {
 
+  showPassword = false;
+
   loginForm;
 
   isLoading = false;
@@ -26,6 +28,11 @@ export class Login {
     password: ['', [Validators.required]]
   });
   }
+
+  
+togglePasswordVisibility(): void {
+  this.showPassword = !this.showPassword;
+}
 
   onSubmit(): void {
 

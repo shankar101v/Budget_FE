@@ -1,123 +1,241 @@
 <div class="dashboard">
-  <div class="dashboard-header">
-    <div>
+  <!-- =====================================================
+       DASHBOARD HEADER
+       ===================================================== -->
+
+  <header class="dashboard-header">
+    <div class="page-heading">
+      <span class="page-eyebrow"> Financial overview </span>
+
       <h1>Dashboard</h1>
-      <p>Overview of your budgets and spending.</p>
+
+      <p>Track your budgets and keep your spending under control.</p>
     </div>
 
-    <a routerLink="/budgets/new" class="add-budget-button"> + Add Budget </a>
-  </div>
+    <a routerLink="/budgets/new" class="add-budget-button">
+      <span class="button-icon">+</span>
+      Add Budget
+    </a>
+  </header>
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
   @if (isLoading) {
-    <div class="loading">Loading dashboard...</div>
+    <div class="dashboard-state loading-state">
+      <app-loading-spinner></app-loading-spinner>
+
+      <p>We're getting your latest budget information.</p>
+    </div>
   }
 
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
   @if (errorMessage) {
-    <div class="error-message">
-      {{ errorMessage }}
+    <div class="dashboard-state error-state">
+      <div class="state-icon">!</div>
+
+      <div>
+        <h3>Something went wrong</h3>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+      </div>
     </div>
   }
 
   @if (!isLoading && !errorMessage) {
-    <!-- SUMMARY CARDS -->
+    <!-- ===================================================
+         SUMMARY CARDS
+         =================================================== -->
 
-    <div class="summary-grid">
-      <div class="summary-card">
-        <span class="summary-label"> Total Budgets </span>
+    <section class="summary-grid">
+      <!-- Total Budgets -->
+
+      <article class="summary-card">
+        <div class="summary-card-top">
+          <div class="summary-icon budgets-icon">#</div>
+
+          <span class="summary-label"> Total Budgets </span>
+        </div>
 
         <strong class="summary-value">
           {{ totalBudgets }}
         </strong>
-      </div>
 
-      <div class="summary-card">
-        <span class="summary-label"> Total Budget </span>
+        <span class="summary-description"> Active budgets </span>
+      </article>
+
+      <!-- Total Budget -->
+
+      <article class="summary-card">
+        <div class="summary-card-top">
+          <div class="summary-icon budget-icon">₹</div>
+
+          <span class="summary-label"> Total Budget </span>
+        </div>
 
         <strong class="summary-value"> ₹{{ totalBudgetAmount | number: '1.2-2' }} </strong>
-      </div>
 
-      <div class="summary-card">
-        <span class="summary-label"> Total Spent </span>
+        <span class="summary-description"> Planned spending </span>
+      </article>
+
+      <!-- Total Spent -->
+
+      <article class="summary-card">
+        <div class="summary-card-top">
+          <div class="summary-icon spent-icon">↓</div>
+
+          <span class="summary-label"> Total Spent </span>
+        </div>
 
         <strong class="summary-value"> ₹{{ totalSpent | number: '1.2-2' }} </strong>
-      </div>
 
-      <div class="summary-card">
-        <span class="summary-label"> Total Remaining </span>
+        <span class="summary-description"> Money spent </span>
+      </article>
+
+      <!-- Total Remaining -->
+
+      <article class="summary-card">
+        <div class="summary-card-top">
+          <div class="summary-icon remaining-icon">✓</div>
+
+          <span class="summary-label"> Total Remaining </span>
+        </div>
 
         <strong class="summary-value"> ₹{{ totalRemaining | number: '1.2-2' }} </strong>
-      </div>
-    </div>
 
-    <!-- BUDGETS -->
+        <span class="summary-description"> Available balance </span>
+      </article>
+    </section>
+
+    <!-- ===================================================
+         BUDGET SECTION
+         =================================================== -->
 
     <section class="budgets-section">
+      <!-- Section Header -->
+
       <div class="section-header">
         <div>
+          <span class="section-eyebrow"> Your finances </span>
+
           <h2>Your Budgets</h2>
+
           <p>Track your spending across all budgets.</p>
         </div>
 
-        <a routerLink="/budgets" class="view-all"> View All </a>
+        <a routerLink="/budgets" class="view-all">
+          View all
+          <span>→</span>
+        </a>
       </div>
+
+      <!-- =================================================
+           EMPTY STATE
+           ================================================= -->
 
       @if (budgets.length === 0) {
         <div class="empty-state">
+          <div class="empty-icon">+</div>
+
           <h3>No budgets yet</h3>
 
           <p>Create your first budget to start tracking your spending.</p>
 
-          <a routerLink="/budgets/new" class="add-budget-button"> + Create Budget </a>
+          <a routerLink="/budgets/new" class="add-budget-button">
+            <span class="button-icon">+</span>
+            Create Budget
+          </a>
         </div>
       }
+
+      <!-- =================================================
+           BUDGET CARDS
+           ================================================= -->
 
       @if (budgets.length > 0) {
         <div class="budget-grid">
           @for (budget of budgets; track budget.id) {
-            <div class="budget-card">
-              <div class="budget-card-header">
-                <div>
-                  <h3>{{ budget.name }}</h3>
+            <article class="budget-card">
+              <!-- Card Header -->
 
-                  <span class="budget-period"> {{ budget.month }}/{{ budget.year }} </span>
+              <div class="budget-card-header">
+                <div class="budget-title">
+                  <div class="budget-icon">₹</div>
+
+                  <div>
+                    <h3>
+                      {{ budget.name }}
+                    </h3>
+
+                    <span class="budget-period"> {{ budget.month }}/{{ budget.year }} </span>
+                  </div>
                 </div>
 
                 <a [routerLink]="['/budgets', budget.id]" class="view-button"> View </a>
               </div>
 
+              <!-- Amounts -->
+
               <div class="budget-amounts">
-                <div>
-                  <span>Budget</span>
-                  <strong> ₹{{ budget.amount | number: '1.2-2' }} </strong>
+                <div class="amount-item">
+                  <span> Budget </span>
+
+                  <strong> ₹{{ budget.amount | number: '1.0-2' }} </strong>
                 </div>
 
-                <div>
-                  <span>Spent</span>
-                  <strong> ₹{{ budget.spentAmount | number: '1.2-2' }} </strong>
+                <div class="amount-item">
+                  <span> Spent </span>
+
+                  <strong class="spent-amount">
+                    ₹{{ budget.spentAmount | number: '1.0-2' }}
+                  </strong>
                 </div>
 
-                <div>
-                  <span>Remaining</span>
-                  <strong> ₹{{ budget.remainingAmount | number: '1.2-2' }} </strong>
+                <div class="amount-item">
+                  <span> Remaining </span>
+
+                  <strong class="remaining-amount">
+                    ₹{{ budget.remainingAmount | number: '1.0-2' }}
+                  </strong>
                 </div>
               </div>
 
-              <div class="progress-info">
-                <span> Spending Progress </span>
+              <!-- Progress -->
 
-                <strong> {{ budget.percentageSpent | number: '1.0-1' }}% </strong>
+              <div class="progress-section">
+                <div class="progress-info">
+                  <span> Spending progress </span>
+
+                  <strong> {{ budget.percentageSpent | number: '1.0-1' }}% </strong>
+                </div>
+
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="getProgressWidth(budget)"></div>
+                </div>
               </div>
 
-              <div class="progress-bar">
-                <div class="progress-fill" [style.width.%]="getProgressWidth(budget)"></div>
-              </div>
+              <!-- Alert -->
 
               @if (getAlertMessage(budget)) {
-                <div class="budget-alert">
+                <div
+                  class="budget-alert"
+                  [class.alert-danger]="budget.percentageSpent >= 100"
+                  [class.alert-warning]="
+                    budget.percentageSpent >= 75 && budget.percentageSpent < 100
+                  "
+                >
+                  <span class="alert-icon"> ! </span>
+
                   {{ getAlertMessage(budget) }}
                 </div>
               }
-            </div>
+            </article>
           }
         </div>
       }

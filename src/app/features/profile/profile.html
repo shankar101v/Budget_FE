@@ -1,0 +1,73 @@
+<div class="profile-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1>My Profile</h1>
+      <p>Manage and view your account information.</p>
+    </div>
+  </div>
+  @if (isLoading) {
+    <app-loading-spinner></app-loading-spinner>
+  } @else if (user) {
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-avatar">
+          {{ getInitials() }}
+        </div>
+
+        <div class="profile-heading">
+          <h2>{{ user.name }}</h2>
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+
+      <!-- Account Information -->
+      <div class="profile-section">
+        <div class="section-heading">
+          <h3>Account Information</h3>
+          <p>Your registered account details.</p>
+        </div>
+
+        <div class="profile-details">
+          <!-- Name -->
+          <div class="detail-item">
+            <span class="detail-label"> Full Name </span>
+
+            <span class="detail-value">
+              {{ user.name }}
+            </span>
+          </div>
+
+          <!-- Email -->
+          <div class="detail-item">
+            <span class="detail-label"> Email Address </span>
+
+            <span class="detail-value">
+              {{ user.email }}
+            </span>
+          </div>
+
+          <!-- Created Date -->
+          <div class="detail-item">
+            <span class="detail-label"> Member Since </span>
+
+            <span class="detail-value">
+              {{ user.createdAt | date: 'dd MMM yyyy' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- No User -->
+    <div class="empty-profile">
+      <div class="empty-icon">?</div>
+
+      <h2>Profile unavailable</h2>
+
+      <p>We couldn't find your account information. Please login again.</p>
+    </div>
+  }
+</div>

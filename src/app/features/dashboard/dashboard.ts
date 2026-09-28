@@ -3,12 +3,13 @@ import { RouterLink } from '@angular/router';
 import { Budget } from '../../models/budget';
 import { BudgetService } from '../../services/budget.service';
 import { CommonModule } from '@angular/common';
+import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink , CommonModule],
+  imports: [RouterLink , CommonModule, LoadingSpinner],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

@@ -7,11 +7,13 @@ import { Budget } from '../../../models/budget';
 import { TransactionService } from '../../../services/transaction.service';
 import { BudgetService } from '../../../services/budget.service';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { CommonModule } from '@angular/common';
+import { LoadingSpinner } from '../../../shared/components/loading-spinner/loading-spinner';
 
 @Component({
   selector: 'app-transaction-list',
   standalone: true,
-  imports: [RouterLink, ConfirmDialog],
+  imports: [RouterLink, ConfirmDialog, CommonModule, LoadingSpinner],
   templateUrl: './transaction-list.html',
   styleUrl: './transaction-list.css'
 })
