@@ -9,6 +9,7 @@ import { BudgetService } from '../../../services/budget.service';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
 import { CommonModule } from '@angular/common';
 import { LoadingSpinner } from '../../../shared/components/loading-spinner/loading-spinner';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-list',
@@ -38,66 +39,65 @@ export class TransactionList implements OnInit {
     this.loadData();
   }
 
-  loadData(): void {
+loadData(): void {
+  this.isLoading = true;
+  this.errorMessage = '';
 
-    this.isLoading = true;
-    this.errorMessage = '';
+  forkJoin({
+    budgets: this.budgetService.getBudgets(),
+    transactions: this.transactionService.getTransactions()
+  }).subscribe({
+    next: (data) => {
+      this.budgets = data.budgets;
+      this.transactions = data.transactions;
 
-    this.budgetService.getBudgets().subscribe({
-      next: (budgets) => {
-        this.budgets = budgets;
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    },
+    error: (error) => {
+      console.error('Error loading transaction data:', error);
 
-        this.loadTransactions();
-      },
+      this.isLoading = false;
 
-      error: (error) => {
-
-        console.error('Error loading budgets:', error);
-
-        this.isLoading = false;
-
-        if (error.status === 401) {
-          this.errorMessage =
-            'Your session has expired. Please login again.';
-        } else {
-          this.errorMessage =
-            'Unable to load budgets.';
-        }
-
-        this.cdr.detectChanges();
+      if (error.status === 401) {
+        this.errorMessage = 'Your session has expired. Please login again.';
+      } else {
+        this.errorMessage = 'Unable to load transaction data.';
       }
-    });
-  }
 
-  loadTransactions(): void {
+      this.cdr.detectChanges();
+    }
+  });
+}
+  // loadTransactions(): void {
 
-    this.transactionService.getTransactions().subscribe({
-      next: (transactions) => {
-        this.transactions = transactions;
+  //   this.transactionService.getTransactions().subscribe({
+  //     next: (transactions) => {
+  //       this.transactions = transactions;
 
-        this.isLoading = false;
+  //       this.isLoading = false;
 
-        this.cdr.detectChanges();
-      },
+  //       this.cdr.detectChanges();
+  //     },
 
-      error: (error) => {
+  //     error: (error) => {
 
-        console.error('Error loading transactions:', error);
+  //       console.error('Error loading transactions:', error);
 
-        this.isLoading = false;
+  //       this.isLoading = false;
 
-        if (error.status === 401) {
-          this.errorMessage =
-            'Your session has expired. Please login again.';
-        } else {
-          this.errorMessage =
-            'Unable to load transactions.';
-        }
+  //       if (error.status === 401) {
+  //         this.errorMessage =
+  //           'Your session has expired. Please login again.';
+  //       } else {
+  //         this.errorMessage =
+  //           'Unable to load transactions.';
+  //       }
 
-        this.cdr.detectChanges();
-      }
-    });
-  }
+  //       this.cdr.detectChanges();
+  //     }
+  //   });
+  // }
 
   getBudgetName(budgetId: number | undefined): string {
 
